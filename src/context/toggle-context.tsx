@@ -42,7 +42,7 @@ function toggleReducer(state: ToggleState, action: ToggleAction): ToggleState {
         selectedOptions: Object.fromEntries(
           action.question.toggleGroups.map((group) => [
             group.id,
-            Math.random() < 0.5 ? group.leftOption.id : group.rightOption.id,
+            group.options[0].id,
           ])
         ),
         isLocked: false,
@@ -65,12 +65,11 @@ function toggleReducer(state: ToggleState, action: ToggleAction): ToggleState {
           const selectedId = newSelectedOptions[group.id];
           if (!selectedId) return count;
 
-          const selectedOption =
-            selectedId === group.leftOption.id
-              ? group.leftOption
-              : group.rightOption;
+          const selectedOption = group.options.find(
+            (option) => option.id === selectedId
+          );
 
-          return count + (selectedOption.isCorrect ? 1 : 0);
+          return count + (selectedOption?.isCorrect ? 1 : 0);
         },
         0
       );
@@ -91,12 +90,11 @@ function toggleReducer(state: ToggleState, action: ToggleAction): ToggleState {
           const selectedId = state.selectedOptions[group.id];
           if (!selectedId) return count;
 
-          const selectedOption =
-            selectedId === group.leftOption.id
-              ? group.leftOption
-              : group.rightOption;
+          const selectedOption = group.options.find(
+            (option) => option.id === selectedId
+          );
 
-          return count + (selectedOption.isCorrect ? 1 : 0);
+          return count + (selectedOption?.isCorrect ? 1 : 0);
         },
         0
       );

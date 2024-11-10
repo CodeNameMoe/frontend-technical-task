@@ -1,6 +1,7 @@
 "use client";
 
 import { ToggleButton } from "./toggle-button";
+import { TripleToggleButton } from "./triple-toggle-button";
 import { ToggleGroup as ToggleGroupType } from "@/src/lib/types";
 import { useToggle } from "@/src/context/toggle-context";
 
@@ -12,9 +13,18 @@ interface ToggleGroupProps {
 
 export function ToggleGroup({ group, isSelected, onToggle }: ToggleGroupProps) {
   const { state, dispatch } = useToggle();
+  const selectedOptionId = state.selectedOptions[group.id];
+  const selectedIndex = group.options.findIndex(
+    (opt) => opt.id === selectedOptionId
+  );
 
-  const selectedOption = state.selectedOptions[group.id] ?? group.leftOption.id;
-  const isLeftSelected = selectedOption === group.leftOption.id;
+  const handleToggle = (newIndex: number) => {
+    dispatch({
+      type: "SELECT_OPTION",
+      groupId: group.id,
+      optionId: group.options[newIndex].id,
+    });
+  };
 
   return (
     <div
@@ -23,21 +33,22 @@ export function ToggleGroup({ group, isSelected, onToggle }: ToggleGroupProps) {
       }`}
       onClick={() => onToggle(!isSelected)}
     >
-      <ToggleButton
-        leftOption={group.leftOption}
-        rightOption={group.rightOption}
-        isLeftSelected={isLeftSelected}
-        isLocked={state.isLocked}
-        onToggle={() => {
-          dispatch({
-            type: "SELECT_OPTION",
-            groupId: group.id,
-            optionId: isLeftSelected
-              ? group.rightOption.id
-              : group.leftOption.id,
-          });
-        }}
-      />
+      {group.options.length === 2 ? (
+        <ToggleButton
+          leftOption={group.options[0]}
+          rightOption={group.options[1]}
+          isLeftSelected={selectedIndex === 0}
+          isLocked={state.isLocked}
+          onToggle={() => handleToggle(selectedIndex === 0 ? 1 : 0)}
+        />
+      ) : (
+        <TripleToggleButton
+          options={group.options}
+          selectedIndex={selectedIndex}
+          isLocked={state.isLocked}
+          onToggle={handleToggle}
+        />
+      )}
     </div>
   );
 }

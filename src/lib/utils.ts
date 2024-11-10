@@ -1,4 +1,5 @@
 import { gradients } from "./colors";
+import { ToggleGroup } from "./types";
 
 export function getGradientColors(ratio: number) {
   if (ratio === 1) {
@@ -12,16 +13,17 @@ export function getGradientColors(ratio: number) {
   }
 }
 
-export function getRandomToggles(questionId: number, count: number): boolean[] {
-  const seed = questionId;
-  const results = Array(count)
-    .fill(0)
-    .map((_, index) => {
-      const value = Math.abs(Math.sin(seed + index * 69091)) * 10000;
-      const result = value - Math.floor(value) < 0.5;
+export function getRandomToggles(toggleGroups: ToggleGroup[]): Record<string, string> {
+  return Object.fromEntries(
+    toggleGroups.map((group) => {
+      const correctOptionIndex = group.options.findIndex(opt => opt.isCorrect);
+      let selectedIndex;
 
-      return result;
-    });
+      do {
+        selectedIndex = Math.floor(Math.random() * group.options.length);
+      } while (selectedIndex === correctOptionIndex);
 
-  return results;
+      return [group.id, group.options[selectedIndex].id];
+    })
+  );
 }

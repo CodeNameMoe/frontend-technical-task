@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect } from "react";
 import { ToggleGroup } from "./toggle-group";
 import { useToggle } from "@/src/context/toggle-context";
 import { motion } from "framer-motion";
@@ -10,20 +10,32 @@ import { questionsService } from "@/src/lib/db/questions-service";
 export function ToggleQuiz() {
   const { state, dispatch } = useToggle();
 
-  const toggleStates = useMemo(() => {
-    const states = getRandomToggles(
-      state.currentQuestion?.id || 0,
-      state.currentQuestion?.toggleGroups.length || 0
-    );
-    return states;
-  }, [state.currentQuestion?.id, state.currentQuestion?.toggleGroups.length]);
+  useEffect(() => {
+    if (state.currentQuestion) {
+      const initialSelections = getRandomToggles(
+        state.currentQuestion.toggleGroups
+      );
+
+      Object.entries(initialSelections).forEach(([groupId, optionId]) => {
+        dispatch({
+          type: "SELECT_OPTION",
+          groupId,
+          optionId,
+        });
+      });
+    }
+  }, [dispatch, state.currentQuestion]);
 
   const correctRatio =
     state.correctCount / (state.currentQuestion?.toggleGroups.length || 0);
   const colors = getGradientColors(correctRatio);
 
-  const handleToggleChange = (index: number, value: boolean) => {
-    toggleStates[index] = value;
+  const handleToggleChange = (groupId: string, optionId: string) => {
+    dispatch({
+      type: "SELECT_OPTION",
+      groupId,
+      optionId,
+    });
   };
 
   const handleNextQuestion = async () => {
@@ -66,14 +78,15 @@ export function ToggleQuiz() {
           <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white mb-6 sm:mb-8 md:mb-12 text-center">
             {state.currentQuestion?.question}
           </h1>
-
           <div className="space-y-4 sm:space-y-6">
-            {state.currentQuestion?.toggleGroups.map((group, index) => (
+            {state.currentQuestion?.toggleGroups.map((group) => (
               <ToggleGroup
                 key={group.id}
                 group={group}
-                isSelected={toggleStates[index]}
-                onToggle={(value) => handleToggleChange(index, value)}
+                isSelected={!!state.selectedOptions[group.id]}
+                onToggle={(value) =>
+                  handleToggleChange(group.id, value.toString())
+                }
               />
             ))}
           </div>

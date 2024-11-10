@@ -3,11 +3,12 @@ export interface ToggleOption {
   label: string;
   isCorrect: boolean;
 }
+
 export interface ToggleGroup {
   id: string;
-  leftOption: ToggleOption;
-  rightOption: ToggleOption;
+  options: ToggleOption[];
 }
+
 export interface QuizQuestion {
   id: number;
   question: string;

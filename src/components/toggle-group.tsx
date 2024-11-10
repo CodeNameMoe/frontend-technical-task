@@ -23,6 +23,8 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
     }
   };
 
+  const hasLongLabels = group.options.some((opt) => opt.label.length > 15);
+
   return (
     <div className="w-full">
       {group.options.length === 2 ? (
@@ -32,6 +34,7 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
           isLeftSelected={selectedIndex === 0}
           isLocked={state.isLocked}
           onToggle={() => handleToggle(selectedIndex === 0 ? 1 : 0)}
+          isVertical={hasLongLabels}
         />
       ) : (
         <TripleToggleButton
@@ -39,6 +42,7 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
           selectedIndex={selectedIndex}
           isLocked={state.isLocked}
           onToggle={handleToggle}
+          isVertical={hasLongLabels}
         />
       )}
     </div>

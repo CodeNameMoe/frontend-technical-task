@@ -23,8 +23,16 @@ export function ToggleQuiz() {
           optionId,
         });
       });
+
+      dispatch({ type: "CHECK_ANSWERS" });
     }
   }, [dispatch, state.currentQuestion]);
+
+  useEffect(() => {
+    if (Object.keys(state.selectedOptions).length > 0) {
+      dispatch({ type: "CHECK_ANSWERS" });
+    }
+  }, [state.selectedOptions, dispatch]);
 
   const correctRatio =
     state.correctCount / (state.currentQuestion?.toggleGroups.length || 0);

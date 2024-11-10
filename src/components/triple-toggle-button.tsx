@@ -26,12 +26,6 @@ export function TripleToggleButton({
         cursor-pointer
         disabled:cursor-not-allowed
       "
-      onClick={(e) => {
-        e.stopPropagation();
-        if (!isLocked) {
-          onToggle((selectedIndex + 1) % options.length);
-        }
-      }}
     >
       <motion.div
         className="absolute top-0.5 bottom-0.5 w-[calc(33.33%-2px)] 
@@ -50,12 +44,18 @@ export function TripleToggleButton({
         {options.map((option, index) => (
           <motion.span
             key={option.id}
-            className="flex-1 text-center text-base sm:text-lg font-medium"
+            className="flex-1 text-center text-base sm:text-lg font-medium cursor-pointer"
             animate={{
               color:
                 selectedIndex === index
                   ? "rgb(31, 41, 55)"
                   : "rgb(255, 255, 255)",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!isLocked) {
+                onToggle(index);
+              }
             }}
           >
             {option.label}

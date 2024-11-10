@@ -83,9 +83,11 @@ export function ToggleQuiz() {
             animate={{ opacity: 1, y: 0 }}
             className="mt-6 sm:mt-8 text-base xs:text-lg sm:text-xl md:text-2xl font-semibold text-white text-center"
           >
-            {toggleStates.every((state) => state)
-              ? "The answer is correct!"
-              : "The answer is incorrect"}
+            {Object.keys(state.selectedOptions).length ===
+              state.currentQuestion?.toggleGroups.length &&
+              (state.isLocked
+                ? "The answer is correct"
+                : "The answer is incorrect")}
           </motion.h2>
 
           {state.isLocked && (

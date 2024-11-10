@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useReducer, ReactNode } from "react";
-import { QuizQuestion } from "@/src/lib/types";
+import type { QuizQuestion } from "@/src/lib/types";
 import { SAMPLE_QUESTION } from "@/src/lib/constants";
 
 interface ToggleState {
@@ -18,38 +18,76 @@ type ToggleAction =
 
 const initialState: ToggleState = {
   currentQuestion: SAMPLE_QUESTION,
-  selectedOptions: {},
+  selectedOptions: {
+    ...Object.fromEntries(
+      SAMPLE_QUESTION.toggleGroups.map((group) => [
+        group.id,
+        Math.random() < 0.5 ? group.leftOption.id : group.rightOption.id,
+      ])
+    ),
+  },
   isLocked: false,
   correctCount: 0,
 };
 
 function toggleReducer(state: ToggleState, action: ToggleAction): ToggleState {
   switch (action.type) {
-    case "SELECT_OPTION":
-      if (state.isLocked) return state;
-      return {
-        ...state,
-        selectedOptions: {
-          ...state.selectedOptions,
-          [action.groupId]: action.optionId,
-        },
+    case "SELECT_OPTION": {
+      const newSelectedOptions = {
+        ...state.selectedOptions,
+        [action.groupId]: action.optionId,
       };
-    case "CHECK_ANSWERS":
+
       const correctCount = state.currentQuestion.toggleGroups.reduce(
         (count, group) => {
-          const selectedOption = group.options.find(
-            (opt) => opt.id === state.selectedOptions[group.id]
-          );
-          return count + (selectedOption?.isCorrect ? 1 : 0);
+          const selectedId = newSelectedOptions[group.id];
+          if (!selectedId) return count;
+
+          const selectedOption =
+            selectedId === group.leftOption.id
+              ? group.leftOption
+              : group.rightOption;
+
+          return count + (selectedOption.isCorrect ? 1 : 0);
         },
         0
       );
 
+      const allCorrect =
+        correctCount === state.currentQuestion.toggleGroups.length;
+
       return {
         ...state,
-        isLocked: true,
+        selectedOptions: newSelectedOptions,
         correctCount,
+        isLocked: allCorrect,
       };
+    }
+    case "CHECK_ANSWERS": {
+      const correctCount = state.currentQuestion.toggleGroups.reduce(
+        (count, group) => {
+          const selectedId = state.selectedOptions[group.id];
+          if (!selectedId) return count;
+
+          const selectedOption =
+            selectedId === group.leftOption.id
+              ? group.leftOption
+              : group.rightOption;
+
+          return count + (selectedOption.isCorrect ? 1 : 0);
+        },
+        0
+      );
+
+      const allCorrect =
+        correctCount === state.currentQuestion.toggleGroups.length;
+
+      return {
+        ...state,
+        correctCount,
+        isLocked: allCorrect,
+      };
+    }
     case "RESET":
       return initialState;
     default:

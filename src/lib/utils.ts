@@ -13,17 +13,43 @@ export function getGradientColors(ratio: number) {
   }
 }
 
-export function getRandomToggles(toggleGroups: ToggleGroup[]): Record<string, string> {
-  return Object.fromEntries(
-    toggleGroups.map((group) => {
-      const correctOptionIndex = group.options.findIndex(opt => opt.isCorrect);
-      let selectedIndex;
+export function getRandomToggles(
+  toggleGroups: ToggleGroup[]
+): Record<string, string> {
+  let attempts = 0;
+  let selections: Record<string, string>;
 
-      do {
-        selectedIndex = Math.floor(Math.random() * group.options.length);
-      } while (selectedIndex === correctOptionIndex);
+  do {
+    selections = Object.fromEntries(
+      toggleGroups.map((group) => {
+        const selectedIndex = Math.floor(Math.random() * group.options.length);
+        return [group.id, group.options[selectedIndex].id];
+      })
+    );
 
-      return [group.id, group.options[selectedIndex].id];
-    })
-  );
+    const allCorrect = toggleGroups.every((group) => {
+      const selectedId = selections[group.id];
+      const selectedOption = group.options.find((opt) => opt.id === selectedId);
+      return selectedOption?.isCorrect;
+    });
+
+    if (!allCorrect || attempts > 10) break;
+    attempts++;
+  } while (true);
+
+  const allCorrect = toggleGroups.every((group) => {
+    const selectedId = selections[group.id];
+    const selectedOption = group.options.find((opt) => opt.id === selectedId);
+    return selectedOption?.isCorrect;
+  });
+
+  if (allCorrect) {
+    const firstGroup = toggleGroups[0];
+    const incorrectOption = firstGroup.options.find((opt) => !opt.isCorrect);
+    if (incorrectOption) {
+      selections[firstGroup.id] = incorrectOption.id;
+    }
+  }
+
+  return selections;
 }

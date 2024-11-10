@@ -4,6 +4,7 @@ import { ToggleButton } from "./toggle-button";
 import { TripleToggleButton } from "./triple-toggle-button";
 import { ToggleGroup as ToggleGroupType } from "@/src/lib/types";
 import { useToggle } from "@/src/context/toggle-context";
+import { useCallback, useEffect, useState } from "react";
 
 interface ToggleGroupProps {
   group: ToggleGroupType;
@@ -25,6 +26,23 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
 
   const hasLongLabels = group.options.some((opt) => opt.label.length > 15);
 
+  const shouldBeVertical = useCallback(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth < 640 && hasLongLabels;
+  }, [hasLongLabels]);
+
+  const [isVertical, setIsVertical] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(shouldBeVertical());
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [shouldBeVertical]);
+
   return (
     <div className="w-full">
       {group.options.length === 2 ? (
@@ -34,7 +52,7 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
           isLeftSelected={selectedIndex === 0}
           isLocked={state.isLocked}
           onToggle={() => handleToggle(selectedIndex === 0 ? 1 : 0)}
-          isVertical={hasLongLabels}
+          isVertical={isVertical}
         />
       ) : (
         <TripleToggleButton
@@ -42,7 +60,7 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
           selectedIndex={selectedIndex}
           isLocked={state.isLocked}
           onToggle={handleToggle}
-          isVertical={hasLongLabels}
+          isVertical={isVertical}
         />
       )}
     </div>

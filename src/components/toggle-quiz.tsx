@@ -91,10 +91,7 @@ export function ToggleQuiz() {
               <ToggleGroup
                 key={group.id}
                 group={group}
-                isSelected={!!state.selectedOptions[group.id]}
-                onToggle={(value) =>
-                  handleToggleChange(group.id, value.toString())
-                }
+                onToggle={handleToggleChange}
               />
             ))}
           </div>

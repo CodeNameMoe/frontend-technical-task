@@ -7,32 +7,24 @@ import { useToggle } from "@/src/context/toggle-context";
 
 interface ToggleGroupProps {
   group: ToggleGroupType;
-  isSelected: boolean;
-  onToggle: (value: boolean) => void;
+  onToggle: (groupId: string, optionId: string) => void;
 }
 
-export function ToggleGroup({ group, isSelected, onToggle }: ToggleGroupProps) {
-  const { state, dispatch } = useToggle();
+export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
+  const { state } = useToggle();
   const selectedOptionId = state.selectedOptions[group.id];
   const selectedIndex = group.options.findIndex(
     (opt) => opt.id === selectedOptionId
   );
 
   const handleToggle = (newIndex: number) => {
-    dispatch({
-      type: "SELECT_OPTION",
-      groupId: group.id,
-      optionId: group.options[newIndex].id,
-    });
+    if (!state.isLocked) {
+      onToggle(group.id, group.options[newIndex].id);
+    }
   };
 
   return (
-    <div
-      className={`w-full ${
-        isSelected ? "selected-styles" : "unselected-styles"
-      }`}
-      onClick={() => onToggle(!isSelected)}
-    >
+    <div className="w-full">
       {group.options.length === 2 ? (
         <ToggleButton
           leftOption={group.options[0]}

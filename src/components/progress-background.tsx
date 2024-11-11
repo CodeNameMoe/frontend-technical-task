@@ -9,7 +9,7 @@ export function ProgressBackground({
   children: React.ReactNode;
 }) {
   const { state } = useToggle();
-  const totalGroups = state.currentQuestion.toggleGroups.length;
+  const totalGroups = state?.currentQuestion?.toggleGroups.length || 0;
   const progress = state.correctCount / totalGroups;
 
   return (

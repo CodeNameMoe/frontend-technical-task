@@ -38,7 +38,7 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
       setIsVertical(shouldBeVertical());
     };
 
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [shouldBeVertical]);

@@ -24,7 +24,7 @@ export function ToggleButton({
     <div
       className={`
         relative w-full
-        ${isVertical ? "h-auto" : "h-14"}
+        ${isVertical ? "h-auto" : "h-16 sm:h-20"}
         rounded-[2.4rem]
         border-2 border-white/60
         overflow-hidden

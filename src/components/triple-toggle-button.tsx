@@ -20,6 +20,7 @@ export function TripleToggleButton({
 }: TripleToggleButtonProps) {
   return (
     <div
+      data-testid="toggle-options"
       className={`
         relative w-full
         ${isVertical ? "h-auto" : "h-16 sm:h-20"}
@@ -63,6 +64,7 @@ export function TripleToggleButton({
         {options.map((option, index) => (
           <motion.span
             key={option.id}
+            data-testid={`toggle-option-${index}`}
             className={`
               flex-1 text-center text-base sm:text-lg font-medium cursor-pointer
               ${isVertical ? "py-3" : ""}

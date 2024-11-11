@@ -44,9 +44,10 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
   }, [shouldBeVertical]);
 
   return (
-    <div className="w-full">
+    <div data-testid="toggle-group" className="flex flex-col gap-4 w-full">
       {group.options.length === 2 ? (
         <ToggleButton
+          data-testid="toggle-options"
           leftOption={group.options[0]}
           rightOption={group.options[1]}
           isLeftSelected={selectedIndex === 0}
@@ -56,6 +57,7 @@ export function ToggleGroup({ group, onToggle }: ToggleGroupProps) {
         />
       ) : (
         <TripleToggleButton
+          data-testid="toggle-options"
           options={group.options}
           selectedIndex={selectedIndex}
           isLocked={state.isLocked}

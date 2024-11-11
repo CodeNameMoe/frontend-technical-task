@@ -67,6 +67,7 @@ export function ToggleQuiz() {
   return (
     <div className="min-h-screen flex items-center justify-center p-3 xs:p-4 sm:p-6 md:p-8 lg:p-12">
       <motion.div
+        data-testid="quiz-container"
         className="w-full max-w-[1200px] rounded-2xl xs:rounded-3xl overflow-hidden"
         style={{
           background: `linear-gradient(180deg, ${colors.from} 0%, ${colors.to} 100%)`,

@@ -22,6 +22,7 @@ export function ToggleButton({
 }: ToggleButtonProps) {
   return (
     <div
+      data-testid="toggle-options"
       className={`
         relative w-full
         ${isVertical ? "h-auto" : "h-16 sm:h-20"}
@@ -67,6 +68,7 @@ export function ToggleButton({
       `}
       >
         <motion.span
+          data-testid="toggle-option-0"
           className={`
             flex-1 text-center text-base sm:text-lg font-medium
             ${isVertical ? "py-3" : ""}
@@ -78,6 +80,7 @@ export function ToggleButton({
           {leftOption.label}
         </motion.span>
         <motion.span
+          data-testid="toggle-option-1"
           className={`
             flex-1 text-center text-base sm:text-lg font-medium
             ${isVertical ? "py-3" : ""}

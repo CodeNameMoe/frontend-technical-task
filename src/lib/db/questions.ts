@@ -230,7 +230,7 @@ export const questions: QuizQuestion[] = [
   },
   {
     id: 11,
-    question: 'Which of these are Shakespeare plays?',
+    question: 'Which are Shakespeare plays?',
     toggleGroups: [
       {
         id: 'g1',
@@ -260,7 +260,7 @@ export const questions: QuizQuestion[] = [
   },
   {
     id: 12,
-    question: 'Select the correct physical quantities and their SI units:',
+    question: 'Match these physical quantities to SI units:',
     toggleGroups: [
       {
         id: 'g1',
@@ -290,7 +290,7 @@ export const questions: QuizQuestion[] = [
   },
   {
     id: 13,
-    question: 'Identify the correct chemical elements and their symbols:',
+    question: 'Match elements to their symbols:',
     toggleGroups: [
       {
         id: 'g1',
@@ -320,7 +320,7 @@ export const questions: QuizQuestion[] = [
   },
   {
     id: 14,
-    question: 'Which of these are examples of forces?',
+    question: 'Which are forces?',
     toggleGroups: [
       {
         id: 'g1',
@@ -350,14 +350,14 @@ export const questions: QuizQuestion[] = [
   },
   {
     id: 15,
-    question: 'Select the correct mathematical terms:',
+    question: 'Which mathematical statements are true?',
     toggleGroups: [
       {
         id: 'g1',
         options: [
-          { id: 'opt1', label: 'Hypotenuse is the longest side of a right triangle', isCorrect: true },
-          { id: 'opt2', label: 'Hypotenuse is the shortest side of a right triangle', isCorrect: false },
-          { id: 'opt3', label: 'Hypotenuse is the middle side of a right triangle', isCorrect: false }
+          { id: 'opt1', label: 'Hypotenuse is the longest side', isCorrect: true },
+          { id: 'opt2', label: 'Hypotenuse is the shortest side', isCorrect: false },
+          { id: 'opt3', label: 'Hypotenuse is the middle side', isCorrect: false }
         ]
       },
       {

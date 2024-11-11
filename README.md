@@ -3,6 +3,7 @@
 An interactive quiz component built with Next.js and TypeScript that tests users' knowledge through animated toggle switches.
 
 ![Quiz Screenshot](/public/Quiz_Screenshot.png)
+![Quiz Screenshot mobile](/public/Quiz_Screenshot_Mobile.png)
 
 [Live Demo →](https://seneca-quiz.vercel.app/)
 
